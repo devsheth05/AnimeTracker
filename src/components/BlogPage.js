@@ -1,30 +1,50 @@
 // src/components/BlogPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase'; // Import Firestore
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 function BlogPage() {
-  const [post, setPost] = useState('');
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [newPost, setNewPost] = useState('');
 
-  const handlePostChange = (e) => {
-    setPost(e.target.value);
-  };
+  // Load blog posts from Firebase on component mount
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const querySnapshot = await getDocs(collection(db, "blogPosts"));
+      const fetchedPosts = [];
+      querySnapshot.forEach((doc) => {
+        fetchedPosts.push(doc.data().content);
+      });
+      setBlogPosts(fetchedPosts);
+    };
+    fetchPosts();
+  }, []);
 
-  const handlePostSubmit = () => {
-    alert('Post submitted!');
-    // You can add functionality to save the post to a database or state here.
+  // Function to add a new blog post to Firestore
+  const handleAddPost = async () => {
+    if (newPost.trim()) {
+      await addDoc(collection(db, "blogPosts"), { content: newPost.trim() });
+      setBlogPosts((prevPosts) => [...prevPosts, newPost.trim()]);
+      setNewPost('');
+    }
   };
 
   return (
     <div>
-      <h1>Anime Blog</h1>
-      <textarea
-        value={post}
-        onChange={handlePostChange}
-        placeholder="Write your anime-related thoughts here..."
-        rows="10"
-        cols="50"
-      ></textarea>
-      <br />
-      <button onClick={handlePostSubmit}>Submit Post</button>
+      <h1>My Anime Blog</h1>
+      <textarea 
+        value={newPost} 
+        onChange={(e) => setNewPost(e.target.value)} 
+        placeholder="Write a new post"
+      />
+      <button onClick={handleAddPost}>Add Post</button>
+      <ul>
+        {blogPosts.map((post, index) => (
+          <li key={index}>
+            <p>{post}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
