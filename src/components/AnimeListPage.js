@@ -1,6 +1,8 @@
 // src/components/AnimeListPage.js
-import React, { useState, useEffect } from 'react';
 import { db } from '../firebase'; // Import Firestore db
+
+import React, { useState, useEffect } from 'react';
+
 import { collection, getDocs, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 function AnimeListPage() {

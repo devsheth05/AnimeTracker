@@ -5,11 +5,11 @@ import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
 
 function HomePage() {
   const [topAnime, setTopAnime] = useState([
-    { id: 1, name: "Naruto", explanation: "" },
-    { id: 2, name: "Attack on Titan", explanation: "" },
-    { id: 3, name: "Demon Slayer", explanation: "" },
-    { id: 4, name: "Fullmetal Alchemist: Brotherhood", explanation: "" },
-    { id: 5, name: "My Hero Academia", explanation: "" },
+    { id: 1, name: "Fairy Tail", explanation: "" },
+    { id: 2, name: "FullMetal Alchemist Brotherhood" , explanation: "" },
+    { id: 3, name: "Rascal does not dream of Bunny-girl senpai", explanation: "" },
+    { id: 4, name: "Re:Zero Starting life in another world", explanation: "" },
+    { id: 5, name: "Naruto", explanation: "" },
   ]);
 
   // Load saved explanations from Firestore when the component mounts
@@ -42,7 +42,7 @@ function HomePage() {
 
   return (
     <div>
-      <h1>Top 5 Anime</h1>
+      <h1>DEVS TOP 5 ANIME!!</h1>
       {topAnime.map((anime, index) => (
         <div key={anime.id}>
           <h2>{`${index + 1}. ${anime.name}`}</h2>
