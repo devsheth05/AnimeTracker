@@ -10,11 +10,13 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/anime-list" element={<AnimeListPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-      </Routes>
+      <div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/anime-list" element={<AnimeListPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
