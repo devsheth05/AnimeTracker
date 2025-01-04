@@ -9,8 +9,44 @@ const AnimeSearchAndOrder = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [animeList, setAnimeList] = useState([]);
   const [error, setError] = useState('');
+  const [topAnime, setTopAnime] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState('');
 
-  // Fetch Anime from API
+  // Fetch Top 50 Anime from API
+  const fetchTopAnime = async () => {
+    try {
+      const response = await axios.post('https://graphql.anilist.co', {
+        query: `
+          query {
+            Page(page: 1, perPage: 50) {
+              media(type: ANIME, sort: POPULARITY_DESC) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  large
+                }
+                genres
+              }
+            }
+          }
+        `,
+      });
+      setTopAnime(response.data.data.Page.media || []);
+    } catch (error) {
+      setError('Failed to load top anime.');
+    }
+  };
+
+  // Filter Top 50 Anime by genre
+  const filteredTopAnime = selectedGenre
+    ? topAnime.filter((anime) => anime.genres.includes(selectedGenre))
+    : topAnime;
+
+  // Fetch Anime from API based on search query
   const fetchAnime = async () => {
     try {
       setError('');
@@ -25,28 +61,26 @@ const AnimeSearchAndOrder = () => {
 
   // Add Anime to List and save to Firestore
   const addAnime = async (anime) => {
-    if (!animeList.find((item) => item.mal_id === anime.mal_id)) {
+    if (!animeList.find((item) => item.id === anime.id)) {
       const updatedList = [...animeList, anime];
       setAnimeList(updatedList);
-      
+
       // Save to Firestore
       const animeRef = collection(db, 'animeList');
       await addDoc(animeRef, anime);  // Add new anime to Firestore
     }
-    setSearchResults([]);
-    setQuery('');
   };
 
   // Remove Anime from List and Firestore
   const removeAnime = async (id) => {
-    const updatedList = animeList.filter((anime) => anime.mal_id !== id);
+    const updatedList = animeList.filter((anime) => anime.id !== id);
     setAnimeList(updatedList);
-    
+
     // Remove from Firestore
     const animeRef = collection(db, 'animeList');
     const snapshot = await getDocs(animeRef);
     snapshot.forEach(async (docSnap) => {
-      if (docSnap.data().mal_id === id) {
+      if (docSnap.data().id === id) {
         await deleteDoc(doc(db, 'animeList', docSnap.id)); // Delete from Firestore
       }
     });
@@ -75,15 +109,84 @@ const AnimeSearchAndOrder = () => {
     const fetchAnimeList = async () => {
       const animeRef = collection(db, 'animeList');
       const snapshot = await getDocs(animeRef);
-      const list = snapshot.docs.map(docSnap => docSnap.data());
+      const list = snapshot.docs.map((docSnap) => docSnap.data());
       setAnimeList(list);
     };
+    fetchTopAnime();
     fetchAnimeList();
   }, []);
 
   return (
     <div>
       <h1>Anime Search and List</h1>
+
+      {/* Genre Filter */}
+      <div>
+        <h3>Filter by Genre</h3>
+        <select
+          value={selectedGenre}
+          onChange={(e) => setSelectedGenre(e.target.value)}
+        >
+          <option value="">All</option>
+          {Array.from(new Set(topAnime.flatMap((anime) => anime.genres))).map((genre) => (
+            <option key={genre} value={genre}>{genre}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Your List Section */}
+      <h2>Your List</h2>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="animeList" direction="horizontal">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+                marginBottom: '30px',
+              }}
+            >
+              {animeList.map((anime, index) => (
+                <Draggable
+                  key={anime.id}
+                  draggableId={anime.id.toString()}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        padding: '10px',
+                        border: '1px solid #ccc',
+                        borderRadius: '5px',
+                        width: '150px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        ...provided.draggableProps.style,
+                      }}
+                    >
+                      <img
+                        src={anime.coverImage?.large || ''}
+                        alt={anime.title.romaji}
+                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                      />
+                      <div>{anime.title.romaji || anime.title.english}</div>
+                      <button onClick={() => removeAnime(anime.id)}>Remove</button>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       {/* Search Bar */}
       <input
@@ -95,7 +198,35 @@ const AnimeSearchAndOrder = () => {
       <button onClick={fetchAnime}>Search</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* Search Results */}
+      {/* Top Anime - Table-like Layout */}
+      <h2>Top 50 Anime</h2>
+      <div className="top-anime-table">
+        {filteredTopAnime.length > 0 ? (
+          <div className="anime-table">
+            {Array.from({ length: 5 }).map((_, rowIndex) => (
+              <div key={rowIndex} className="anime-row">
+                {filteredTopAnime
+                  .slice(rowIndex * 10, rowIndex * 10 + 10)
+                  .map((anime) => (
+                    <div key={anime.id} className="anime-card">
+                      <img
+                        src={anime.coverImage?.large}
+                        alt={anime.title.romaji}
+                        className="anime-img"
+                      />
+                      <div>{anime.title.romaji || anime.title.english}</div>
+                      <button onClick={() => addAnime(anime)}>Add to My List</button>
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No anime found for the selected genre.</p>
+        )}
+      </div>
+
+      {/* Anime Search Results */}
       {searchResults.length > 0 && (
         <ul>
           {searchResults.map((anime) => (
@@ -106,64 +237,6 @@ const AnimeSearchAndOrder = () => {
           ))}
         </ul>
       )}
-
-      {/* Drag and Drop List */}
-      <DragDropContext onDragEnd={onDragEnd}>
-  <Droppable droppableId="animeList">
-    {(provided) => (
-      <ul
-        {...provided.droppableProps}
-        ref={provided.innerRef}
-        style={{ listStyle: 'none', padding: 0 }}
-      >
-        {animeList.map((anime, index) => {
-          // Check if mal_id is undefined or missing
-          if (!anime.mal_id) {
-            console.warn('Skipping anime with missing mal_id', anime);
-            return null;
-          }
-          return (
-            <Draggable
-              key={anime.mal_id}
-              draggableId={anime.mal_id.toString()}
-              index={index}
-            >
-              {(provided) => (
-                <li
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  style={{
-                    marginBottom: '10px',
-                    padding: '10px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    ...provided.draggableProps.style,
-                  }}
-                >
-                  <img
-                    src={anime.images?.jpg?.image_url || ''}
-                    alt={anime.title}
-                    style={{ width: '50px', marginRight: '10px' }}
-                  />
-                  {anime.title}{' '}
-                  <button
-                    style={{ marginLeft: '10px' }}
-                    onClick={() => removeAnime(anime.mal_id)}
-                  >
-                    Remove
-                  </button>
-                </li>
-              )}
-            </Draggable>
-          );
-        })}
-        {provided.placeholder}
-      </ul>
-    )}
-  </Droppable>
-</DragDropContext>
-
     </div>
   );
 };
