@@ -1,31 +1,25 @@
 // src/components/BlogPage.js
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase'; // Import Firestore
-import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 function BlogPage() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [newPost, setNewPost] = useState('');
 
-  // Load blog posts from Firebase on component mount
+  // Load blog posts from localStorage when the component mounts
   useEffect(() => {
-    const fetchPosts = async () => {
-      const querySnapshot = await getDocs(collection(db, "blogPosts"));
-      const fetchedPosts = [];
-      querySnapshot.forEach((doc) => {
-        fetchedPosts.push(doc.data().content);
-      });
-      setBlogPosts(fetchedPosts);
-    };
-    fetchPosts();
-  }, []);
+    const savedPosts = localStorage.getItem('blogPosts');
+    if (savedPosts) {
+      setBlogPosts(JSON.parse(savedPosts)); // Parse and set posts from localStorage
+    }
+  }, []); // Run this only once when the component mounts
 
-  // Function to add a new blog post to Firestore
-  const handleAddPost = async () => {
+  // Function to add a new blog post to localStorage
+  const handleAddPost = () => {
     if (newPost.trim()) {
-      await addDoc(collection(db, "blogPosts"), { content: newPost.trim() });
-      setBlogPosts((prevPosts) => [...prevPosts, newPost.trim()]);
-      setNewPost('');
+      const updatedPosts = [...blogPosts, newPost.trim()];
+      setBlogPosts(updatedPosts); // Update state with new post
+      localStorage.setItem('blogPosts', JSON.stringify(updatedPosts)); // Save updated posts to localStorage
+      setNewPost(''); // Clear the textarea
     }
   };
 

@@ -1,43 +1,33 @@
 // src/components/AnimeListPage.js
-import { db } from '../firebase'; // Import Firestore db
-
 import React, { useState, useEffect } from 'react';
-
-import { collection, getDocs, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 function AnimeListPage() {
   const [animeList, setAnimeList] = useState([]);
   const [animeInput, setAnimeInput] = useState('');
 
-  // Load anime list from Firestore when the component mounts
+  // Load anime list from localStorage when the component mounts
   useEffect(() => {
-    const fetchAnimeList = async () => {
-      const animeRef = collection(db, 'animeList'); // Get the reference to the anime list collection
-      const snapshot = await getDocs(animeRef); // Retrieve the anime list from Firestore
-      const list = snapshot.docs.map((doc) => doc.data().name); // Extract anime names
-      setAnimeList(list); // Update state with fetched data
-    };
-
-    fetchAnimeList(); // Call the function to load data
+    const savedList = localStorage.getItem('animeList');
+    if (savedList) {
+      setAnimeList(JSON.parse(savedList)); // Parse and set the list from localStorage
+    }
   }, []); // Run this only once when the component mounts
 
-  // Save anime list to Firestore
-  const handleAddAnime = async () => {
+  // Save anime list to localStorage and update state
+  const handleAddAnime = () => {
     if (animeInput.trim()) {
-      // Add the new anime to Firestore
-      const animeRef = collection(db, 'animeList');
-      await addDoc(animeRef, { name: animeInput.trim() });
-
-      // Update local state to reflect changes without waiting for Firestore response
-      setAnimeList((prevList) => [...prevList, animeInput.trim()]);
+      const updatedList = [...animeList, animeInput.trim()];
+      setAnimeList(updatedList); // Update state with new list
+      localStorage.setItem('animeList', JSON.stringify(updatedList)); // Save updated list to localStorage
       setAnimeInput(''); // Clear input field
     }
   };
 
-  // Handle removing an anime from the list (this is just for local state; Firestore removal should be handled separately)
+  // Handle removing an anime from the list
   const handleRemoveAnime = (index) => {
     const updatedList = animeList.filter((_, i) => i !== index);
-    setAnimeList(updatedList);
+    setAnimeList(updatedList); // Update state with new list
+    localStorage.setItem('animeList', JSON.stringify(updatedList)); // Save updated list to localStorage
   };
 
   return (
@@ -49,7 +39,7 @@ function AnimeListPage() {
         onChange={(e) => setAnimeInput(e.target.value)}
         placeholder="Add a new anime"
       />
-      <button onClick={handleAddAnime}>Add</button>
+      <button onClick={handleAddAnime} disabled={!animeInput.trim()}>Add</button>
       <ul>
         {animeList.map((anime, index) => (
           <li key={index}>

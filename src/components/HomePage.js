@@ -1,43 +1,31 @@
 // src/components/HomePage.js
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase'; // Import Firestore
-import { collection, getDocs, setDoc, doc } from 'firebase/firestore';
 
 function HomePage() {
   const [topAnime, setTopAnime] = useState([
     { id: 1, name: "Fairy Tail", explanation: "" },
-    { id: 2, name: "FullMetal Alchemist Brotherhood" , explanation: "" },
+    { id: 2, name: "FullMetal Alchemist Brotherhood", explanation: "" },
     { id: 3, name: "Rascal does not dream of Bunny-girl senpai", explanation: "" },
     { id: 4, name: "Re:Zero Starting life in another world", explanation: "" },
     { id: 5, name: "Naruto", explanation: "" },
   ]);
 
-  // Load saved explanations from Firestore when the component mounts
+  // Load saved explanations from localStorage when the component mounts
   useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "topAnime"));
-      const animeData = [];
-      querySnapshot.forEach((doc) => {
-        animeData.push(doc.data());
-      });
-      if (animeData.length > 0) {
-        setTopAnime(animeData);
-      }
-    };
-    fetchData();
-  }, []);
+    const savedAnime = localStorage.getItem('topAnime');
+    if (savedAnime) {
+      setTopAnime(JSON.parse(savedAnime)); // Parse and set the anime list from localStorage
+    }
+  }, []); // Run this once when the component mounts
 
-  // Function to handle explanation changes and save to Firestore
-  const handleExplanationChange = async (index, value) => {
+  // Function to handle explanation changes and save to localStorage
+  const handleExplanationChange = (index, value) => {
     const updatedAnimeList = [...topAnime];
     updatedAnimeList[index].explanation = value;
     setTopAnime(updatedAnimeList);
 
-    // Save updated explanation to Firestore
-    await setDoc(doc(db, "topAnime", `${index + 1}`), {
-      name: updatedAnimeList[index].name,
-      explanation: value,
-    });
+    // Save updated anime list with explanations to localStorage
+    localStorage.setItem('topAnime', JSON.stringify(updatedAnimeList));
   };
 
   return (
