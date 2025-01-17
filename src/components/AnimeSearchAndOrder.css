@@ -1,75 +1,92 @@
-/* src/components/AnimeSearchAndOrder.css */
-
+/* Anime Grid Layout */
 .anime-list-container {
     display: flex;
-    flex-wrap: wrap; /* Allows wrapping to the next row */
-    justify-content: flex-start; /* Aligns items to the left */
-    gap: 15px; /* Adds space between items */
-  }
-  
-  .anime-item {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.anime-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 150px; /* You can adjust this width */
+    width: 150px;
     text-align: center;
-  }
-  
-  .anime-item img {
-    width: 100px; /* Set a fixed width for the images */
-    height: 150px; /* Set a fixed height for the images */
-    object-fit: cover; /* Ensures the images fit inside the box without distortion */
-  }
-  
-  .anime-title {
-    font-size: 14px; /* Adjust title font size */
-    margin-top: 8px; /* Adds space between the image and the title */
-  }
-  
-  .anime-grid {
+}
+
+.anime-item img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.anime-title {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.anime-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 columns */
-    gap: 20px; /* Space between items */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
     justify-items: center;
-  }
-  
-  .anime-item {
+}
+
+.anime-item {
     width: 100%;
-    max-width: 200px; /* Maximum width for each item */
+    max-width: 200px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: rgb(153, 207, 204);
+    box-shadow: 0 2px 5px rgba(26, 5, 5, 0.1);
     text-align: center;
-  }
-  
-  .anime-img {
+}
+
+.anime-img {
     width: 100%;
     height: 150px;
     object-fit: cover;
     border-radius: 8px;
-  }
-  
-  .add-btn, .remove-btn {
+}
+
+/* Add Button */
+.add-btn, .remove-btn, .added-btn {
     padding: 8px 16px;
     margin-top: 10px;
-    background-color: #4CAF50;
-    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .add-btn:hover, .remove-btn:hover {
+}
+
+/* Add Button */
+/* Add Button */
+.add-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.add-btn:hover {
     background-color: #45a049;
-  }
-  
-  .remove-btn {
+}
+
+/* Remove Button */
+.remove-btn {
     background-color: #f44336;
-  }
-  
-  .remove-btn:hover {
-    background-color: #e53935;
-  }
-  
+    color: white;
+}
+
+.remove-btn:hover {
+    background-color: #e2615e;
+}
+
+/* Added Button (Grey) */
+.added-btn {
+    background-color: #9e9e9e; /* Grey for added state */
+    color: white;
+    cursor: not-allowed;
+}
+
+.added-btn:hover {
+    background-color: #8c8c8c; /* Slightly darker grey on hover */
+}
