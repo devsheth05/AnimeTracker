@@ -1,12 +1,12 @@
 /* Anime Grid Layout */
-.anime-list-container {
+.search-page .anime-list-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 15px;
 }
 
-.anime-item {
+.search-page .anime-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,25 +14,25 @@
     text-align: center;
 }
 
-.anime-item img {
+.search-page .anime-item img {
     width: 100px;
     height: 150px;
     object-fit: cover;
 }
 
-.anime-title {
+.search-page .anime-title {
     font-size: 14px;
     margin-top: 8px;
 }
 
-.anime-grid {
+.search-page .anime-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     justify-items: center;
 }
 
-.anime-item {
+.search-page .anime-item {
     width: 100%;
     max-width: 200px;
     padding: 10px;
@@ -43,7 +43,7 @@
     text-align: center;
 }
 
-.anime-img {
+.search-page .anime-img {
     width: 100%;
     height: 150px;
     object-fit: cover;
@@ -51,7 +51,9 @@
 }
 
 /* Add Button */
-.add-btn, .remove-btn, .added-btn {
+.search-page .add-btn,
+.search-page .remove-btn,
+.search-page .added-btn {
     padding: 8px 16px;
     margin-top: 10px;
     border: none;
@@ -61,32 +63,32 @@
 
 /* Add Button */
 /* Add Button */
-.add-btn {
+.search-page .add-btn {
     background-color: #4CAF50; /* Green */
     color: white;
 }
 
-.add-btn:hover {
+.search-page .add-btn:hover {
     background-color: #45a049;
 }
 
 /* Remove Button */
-.remove-btn {
+.search-page .remove-btn {
     background-color: #f44336;
     color: white;
 }
 
-.remove-btn:hover {
+.search-page .remove-btn:hover {
     background-color: #e2615e;
 }
 
 /* Added Button (Grey) */
-.added-btn {
+.search-page .added-btn {
     background-color: #9e9e9e; /* Grey for added state */
     color: white;
     cursor: not-allowed;
 }
 
-.added-btn:hover {
+.search-page .added-btn:hover {
     background-color: #8c8c8c; /* Slightly darker grey on hover */
 }

@@ -53,7 +53,8 @@ const Navbar = () => {
         <Link to="/anime-list" style={linkStyle}>Anime List</Link>
         <Link to="/blog" style={linkStyle}>Blog</Link>
         <Link to="/anime-search-and-order" style={linkStyle}>Anime Search</Link>
-      </div>
+        <Link to="/anime" style={linkStyle}>Anime Info</Link>
+        </div>
     </div>
   );
 };

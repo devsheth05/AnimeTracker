@@ -52,8 +52,7 @@ const AnimeSearchAndOrder = () => {
                 genres
               }
             }
-          }
-        `
+          `
       });
 
       const genres = response.data.data.Page.media.flatMap((anime) => anime.genres);
@@ -183,7 +182,7 @@ const AnimeSearchAndOrder = () => {
   }, [selectedGenre]);
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="search-page container mx-auto px-4">
       <h1 className="text-2xl font-bold mb-6">Anime Search and List</h1>
 
       {/* Genre Filter */}
