@@ -43,24 +43,28 @@ const AnimeSearchAndOrder = () => {
 
   // Fetch all genres from the top anime
   const fetchGenres = async () => {
-    try {
-      const response = await axios.post('https://graphql.anilist.co', {
-        query: `
-          query {
-            Page(page: 1, perPage: 50) {
-              media(type: ANIME, sort: POPULARITY_DESC) {
-                genres
-              }
-            }
-          `
-      });
+  try {
+    const response = await axios.post('https://graphql.anilist.co', {
+      query: `
+        query {
+          GenreCollection
+        }
+      `
+    });
 
-      const genres = response.data.data.Page.media.flatMap((anime) => anime.genres);
-      setAllGenres(Array.from(new Set(genres))); // Remove duplicates
-    } catch (error) {
-      setError('Failed to fetch genres.');
-    }
-  };
+    console.log("Genres API Response:", response.data); // Debugging line
+
+    // Filter out the "Hentai" genre
+    const filteredGenres = response.data.data.GenreCollection.filter(genre => genre !== "Hentai");
+
+
+    setAllGenres(filteredGenres || []);
+  } catch (error) {
+    console.error('Failed to fetch genres:', error);
+    setError('Failed to fetch genres.');
+  }
+};
+
 
   // Fetch top 50 highest-rated anime titles
   const fetchTop50Anime = async () => {
@@ -183,11 +187,11 @@ const AnimeSearchAndOrder = () => {
 
   return (
     <div className="search-page container mx-auto px-4">
-      <h1 className="text-2xl font-bold mb-6">Anime Search and List</h1>
+<h1 style={{ fontSize: '60px' }} className="font-bold mb-6">Anime Search and List</h1>
 
       {/* Genre Filter */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">Filter by Genre</h3>
+      <div className="mb-6 genre-filter">
+        <h3 className="text-lg font-semibold mb-2"style={{ fontSize: '28px' }}>Filter by Genre</h3>
         <select
           value={selectedGenre}
           onChange={(e) => setSelectedGenre(e.target.value)}
@@ -203,8 +207,8 @@ const AnimeSearchAndOrder = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">Search for an Anime</h3>
+      <div className="mb-6 search-section">
+        <h3 className="text-lg font-semibold mb-2"style={{ fontSize: '28px' }}>Search for an Anime</h3>
         <input
           type="text"
           placeholder="Search for an anime..."
@@ -214,14 +218,14 @@ const AnimeSearchAndOrder = () => {
         />
         <button
           onClick={searchAnime}
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"style={{ fontSize: '22px' }}
         >
           Search
         </button>
       </div>
 
       {/* Your List Section */}
-      <h2 className="text-xl font-bold mb-4">Your List</h2>
+      <h2 className="text-xl font-bold mb-4"style={{ fontSize: '45px' }}>Your List</h2>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="animeList" direction="horizontal">
           {(provided) => (
@@ -271,7 +275,7 @@ const AnimeSearchAndOrder = () => {
       </DragDropContext>
 
       {/* Top Anime Section */}
-      <h2 className="text-xl font-bold mb-4">Top 50 Anime</h2>
+      <h2 className="text-3xl font-bold mb-4" style={{ fontSize: '45px' }}>Top 50 Anime</h2>
       <div className="overflow-x-auto">
         <div className="anime-grid">
           {topAnime.length > 0 ? (

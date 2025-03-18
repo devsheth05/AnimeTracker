@@ -5,7 +5,6 @@ import Navbar from './components/Navbar';
 
 // Lazy load the components
 const HomePage = React.lazy(() => import('./components/HomePage'));
-const AnimeListPage = React.lazy(() => import('./components/AnimeListPage'));
 const BlogPage = React.lazy(() => import('./components/BlogPage'));
 const AnimeSearchAndOrder = React.lazy(() => import('./components/AnimeSearchAndOrder')); // Lazy load AnimeSearchAndOrder
 const AnimeInfoPage = React.lazy(() => import('./components/AnimeInfoPage')); // Lazy load AnimeInfoPage
@@ -19,7 +18,6 @@ function App() {
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/anime-list" element={<AnimeListPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/anime-search-and-order" element={<AnimeSearchAndOrder />} /> {/* Add route */}
             <Route path="/anime/:id" element={<AnimeInfoPage />} /> {/* Add AnimeInfoPage route */}

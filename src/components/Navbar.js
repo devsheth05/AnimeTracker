@@ -9,7 +9,7 @@ const Navbar = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start', // Align to the left
-    border: '1px solid #c3c3c3',
+    border: '1px solid #ffffff',
     borderRadius: '4px',
     padding: '10px 20px',
     width: '100%', // Stretch across the screen
@@ -50,7 +50,6 @@ const Navbar = () => {
       {/* Links */}
       <div style={linksContainerStyle}>
         <Link to="/" style={linkStyle}>Home</Link>
-        <Link to="/anime-list" style={linkStyle}>Anime List</Link>
         <Link to="/blog" style={linkStyle}>Blog</Link>
         <Link to="/anime-search-and-order" style={linkStyle}>Anime Search</Link>
         <Link to="/anime" style={linkStyle}>Anime Info</Link>

@@ -1,7 +1,7 @@
 /* Home Page Styles */
 
 .homepage-container {
-  background-color: #121212;
+  background-color: #000000;
   color: #fff;
   padding: 20px;
 }
@@ -14,7 +14,7 @@
 .welcome-message {
   font-size: 5.5rem;
   font-weight: bold;
-  color: #3aa95d;
+  color: #a781e5;
 }
 
 .description {
