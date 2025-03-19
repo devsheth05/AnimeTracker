@@ -46,8 +46,9 @@ const HomePage = () => {
       const response = await axios.get('https://api.jikan.moe/v4/seasons/now', { params: { limit: 10 } });
       const sortedAnime = (response.data.data || [])
         .filter((anime) => anime.episodes && anime.airing)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
+        .sort((a, b) => new Date(b.aired.from) - new Date(a.aired.from))
+        .slice(0, 5);
+
       setRecentlyAdded(sortedAnime);
     } catch (error) {
       console.error('Error fetching latest episodes:', error);
@@ -71,17 +72,23 @@ const HomePage = () => {
       }
     }
   };
+  
 
   const toggleSearchModal = () => setShowSearchModal(!showSearchModal);
 
   const addToTop5 = (anime) => {
+    // Get the current Top 5 anime from localStorage or fallback to an empty array
     const currentTop5 = JSON.parse(localStorage.getItem('top5Anime')) || [];
-    if (currentTop5.length < 5 && !currentTop5.some(item => item.id === anime.id)) {
-      currentTop5.push(anime);
-      localStorage.setItem('top5Anime', JSON.stringify(currentTop5));
-      setTopAnime([...currentTop5]);
+  
+    // Check if the anime is already in the list and if the list is not full
+    if (currentTop5.length < 5 && !currentTop5.some((item) => item.id === anime.id)) {
+      currentTop5.push(anime); // Add the new anime to the list
+      localStorage.setItem('top5Anime', JSON.stringify(currentTop5)); // Update localStorage
+      setTopAnime([...currentTop5]); // Update the state with the new list
     }
   };
+  
+  
 
   const clearList = () => {
     localStorage.removeItem('top5Anime');
@@ -92,11 +99,16 @@ const HomePage = () => {
     fetchTopAnime();
     fetchLatestEpisodes();
   }, []);
-
+  
   useEffect(() => {
     const storedTop5 = JSON.parse(localStorage.getItem('top5Anime'));
-    if (storedTop5) setTopAnime(storedTop5);
-  }, []);
+    if (storedTop5) {
+      setTopAnime(storedTop5);  // Load saved Top 5 from localStorage
+    } else {
+      setTopAnime(originalTopAnime);  // Fallback to original Top 5 if none is saved
+    }
+  }, [originalTopAnime]);
+  
 
   return (
     <div className="homepage-container">
@@ -125,48 +137,55 @@ const HomePage = () => {
             <button onClick={searchAnime} className="edit-list-btn">Search</button>
 
             <div className="search-results">
-              {searchResults.length > 0 ? (
-                searchResults.map((anime) => (
-                  <div key={anime.mal_id} className="anime-item">
-                    <img
-                      src={anime.images?.jpg?.large_image_url || 'placeholder.jpg'}
-                      alt={anime.title || 'Anime Cover'}
-                      className="anime-img"
-                    />
-                    <div className="anime-info">
-                      <h3>{anime.title || 'Unknown Title'}</h3>
-                      <button className="add-btn" onClick={() => addToTop5(anime)}>Add to Top 5</button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No results found</p>
-              )}
-            </div>
+  {searchResults.length > 0 ? (
+    searchResults.map((anime) => (
+      <div key={anime.mal_id} className="anime-item">
+        <img
+          src={anime.images?.jpg?.large_image_url || 'placeholder.jpg'}
+          alt={anime.title || 'Anime Cover'}
+          className="anime-img"
+        />
+        <div className="anime-info">
+          <h3>{anime.title || 'Unknown Title'}</h3>
+          <button className="add-btn" onClick={() => addToTop5(anime)}>Add to Top 5</button>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p>No results found</p>
+  )}
+</div>
+
 
             <button onClick={clearList} className="clear-list-btn">Clear List</button>
           </div>
         </div>
       )}
 
-      <section className="top-anime-showcase">
-        <h1 className="section-title">Top 5 Anime</h1>
-        <div className="anime-grid">
-          {topAnime.map((anime) => (
-            <div key={anime.id} className="anime-item">
-              <img
-                src={anime.coverImage?.large || 'placeholder.jpg'}
-                alt={anime.title?.romaji || anime.title?.english || 'Anime Cover'}
-                className="anime-img"
-              />
-              <div className="anime-info">
-                <h3>{anime.title?.romaji || anime.title?.english || 'Unknown Title'}</h3>
-                <Link to={`/anime/${anime.id}`} className="view-details-btn">View Details</Link>
-              </div>
-            </div>
-          ))}
+<section className="top-anime-showcase">
+  <h1 className="section-title">Top 5 Anime</h1>
+  <div className="anime-grid">
+    {topAnime.length > 0 ? (
+      topAnime.map((anime) => (
+        <div key={anime.id} className="anime-item">
+          <img
+            src={anime.coverImage?.large || 'placeholder.jpg'}  // Fallback to placeholder
+            alt={anime.title?.romaji || anime.title?.english || 'Anime Cover'}
+            className="anime-img"
+          />
+          <div className="anime-info">
+            <h3>{anime.title?.romaji || anime.title?.english || 'Unknown Title'}</h3>
+            <Link to={`/anime/${anime.id}`} className="view-details-btn">View Details</Link>
+          </div>
         </div>
-      </section>
+      ))
+    ) : (
+      <p>No anime in your Top 5 yet!</p>
+    )}
+  </div>
+</section>
+
+
 
       <section className="latest-episodes">
         <h2 className="section-title">Latest Episodes Released</h2>
@@ -181,23 +200,15 @@ const HomePage = () => {
                 />
                 <div className="anime-info">
                   <h3>{anime.title || 'Unknown Title'}</h3>
-                  <p>{anime.episodes} Episodes</p>
+                  <p>Episodes: {anime.episodes || 'N/A'}</p>
+                  <Link to={`/anime/${anime.mal_id}`} className="view-details-btn">View Details</Link>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p>No new episodes available.</p>
+          <p>No recent episodes available.</p>
         )}
-      </section>
-
-      <section className="featured-genres">
-        <h2 className="section-title">Featured Genres</h2>
-        <div className="genre-list">
-          {genres.map((genre, index) => (
-            <div key={index} className="genre-item">{genre}</div>
-          ))}
-        </div>
       </section>
     </div>
   );

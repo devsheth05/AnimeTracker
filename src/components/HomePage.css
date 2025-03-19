@@ -42,17 +42,19 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   justify-items: center;
+  overflow: hidden;
 }
 
 .anime-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
   background: #1e1e1e;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   transition: transform 0.3s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .anime-item:hover {
@@ -63,12 +65,12 @@
   width: 100%;
   height: auto; /* Fixed height for large rectangle images */
   /*object-fit: cover; /* Ensures the image fills the space while maintaining aspect ratio */
-  border-bottom: 2px solid #00bcd4;
 }
 
 .anime-info {
-  padding: 10px;
   text-align: center;
+  flex-grow: 1;
+  padding: 10px;
 }
 
 .anime-info h3 {
@@ -79,86 +81,32 @@
 
 .anime-info p {
   font-size: 1rem;
-  color: #469d6a;
+  margin-bottom: 10px;
+  color: #e0bfbf;
 }
 
+
 .view-details-btn {
-  background-color: #87b36c;
-  color: #121212;
+  background-color: #5a36a1;
+  color: #ffb9e7;
   border: none;
   padding: 8px 20px;
   font-size: 1rem;
-  border-radius: 3px;
+  border-radius: 12px;
   cursor: pointer;
-  margin-top: 5px;
+  margin-top: 50px;
   transition: background-color 0.3s;
 }
 
 .view-details-btn:hover {
-  background-color: #165631;
+  background-color: #ff6cb1;
+  color:rgb(124, 43, 175)
 }
 
 
 .latest-episodes .anime-grid {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-}
-
-.featured-genres {
-  margin-top: 40px;
-  padding: 40px 0;
-  background: #1f1f1f;
-  border-radius: 12px;
-}
-
-.genre-cards {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-
-.genre-card {
-  background: #333;
-  color: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  width: 220px;
-  text-align: center;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.genre-card:hover {
-  transform: scale(1.1);
-  background: #00bcd4;
-}
-
-.genre-icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  background: #444;
-  color: #fff;
-  padding: 15px;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-.genre-icon:hover {
-  background-color: #00bcd4;
-}
-
-.genre-card h3 {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-top: 15px;
-  letter-spacing: 1px;
 }
 
 /* Popup Search Modal Styles */
