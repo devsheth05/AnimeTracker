@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { AnimeContext } from './AnimeContext'; // Import context
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './AnimeSearchAndOrder.css'; // import css file
 

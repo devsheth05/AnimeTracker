@@ -85,7 +85,6 @@
   color: #e0bfbf;
 }
 
-
 .view-details-btn {
   background-color: #5a36a1;
   color: #ffb9e7;
@@ -100,42 +99,41 @@
 
 .view-details-btn:hover {
   background-color: #ff6cb1;
-  color:rgb(124, 43, 175)
+  color: rgb(124, 43, 175)
 }
-
 
 .latest-episodes .anime-grid {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
-
-/* Popup Search Modal Styles */
+/* 
+ /* Popup Search Modal Styles 
 .search-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  display: none; /* Keep it hidden by default */
+  background: rgba(0, 0, 0, 0.5); 
+  display: none; 
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it appears above other elements */
+  z-index: 1000; Ensure it appears above other elements
 }
 
 .search-modal.show {
   display: flex; /* Modal becomes visible when the 'show' class is added */
-}
 
-.search-modal .modal-content {
-  background: #121212; /* Dark background to match homepage theme */
+
+/* .search-modal .modal-content {
+  background: #121212;
   padding: 15px;
   border-radius: 8px;
   width: 90%;
-  max-width: 400px; /* Smaller width for the popup */
+  max-width: 400px; 
   position: relative;
   overflow-y: auto;
-  max-height: 80%; /* Limit the height to keep the popup small */
+  max-height: 80%; 
 }
 
 .search-modal input {
@@ -155,7 +153,7 @@
   color: #fff;
   border: none;
   border-radius: 5px;
-  width: 100%; /* Button spans full width */
+  width: 100%; 
   margin-top: 10px;
   transition: background-color 0.3s;
 }
@@ -195,8 +193,8 @@
 
 .search-modal .search-results {
   margin-top: 15px;
-  max-height: 200px; /* Limit the results area size */
-  overflow-y: auto; /* Scroll if results overflow */
+  max-height: 200px; 
+  overflow-y: auto;
 }
 
 .search-modal .anime-item {
@@ -225,4 +223,4 @@
 
 .search-modal .edit-list-btn:hover {
   background-color: #0097a7;
-}
+} */
