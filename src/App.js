@@ -1,6 +1,6 @@
 // src/App.js
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { AnimeProvider} from './components/AnimeContext'; // Import the provider
 
