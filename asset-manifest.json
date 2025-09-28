@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/AnimeTracker/static/css/main.ac3c0e92.css",
-    "main.js": "/AnimeTracker/static/js/main.15954fc6.js",
+    "main.js": "/AnimeTracker/static/js/main.0d929c05.js",
     "static/css/583.59d3937a.chunk.css": "/AnimeTracker/static/css/583.59d3937a.chunk.css",
     "static/js/583.098fd020.chunk.js": "/AnimeTracker/static/js/583.098fd020.chunk.js",
     "static/css/341.8d6c96b6.chunk.css": "/AnimeTracker/static/css/341.8d6c96b6.chunk.css",
@@ -15,7 +15,7 @@
     "static/js/150.12ae0fba.chunk.js": "/AnimeTracker/static/js/150.12ae0fba.chunk.js",
     "index.html": "/AnimeTracker/index.html",
     "main.ac3c0e92.css.map": "/AnimeTracker/static/css/main.ac3c0e92.css.map",
-    "main.15954fc6.js.map": "/AnimeTracker/static/js/main.15954fc6.js.map",
+    "main.0d929c05.js.map": "/AnimeTracker/static/js/main.0d929c05.js.map",
     "583.59d3937a.chunk.css.map": "/AnimeTracker/static/css/583.59d3937a.chunk.css.map",
     "583.098fd020.chunk.js.map": "/AnimeTracker/static/js/583.098fd020.chunk.js.map",
     "341.8d6c96b6.chunk.css.map": "/AnimeTracker/static/css/341.8d6c96b6.chunk.css.map",
@@ -30,6 +30,6 @@
   },
   "entrypoints": [
     "static/css/main.ac3c0e92.css",
-    "static/js/main.15954fc6.js"
+    "static/js/main.0d929c05.js"
   ]
 }
