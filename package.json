@@ -2,7 +2,7 @@
   "name": "anime-tracker",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://devsheth05.github.io/AnimeTracker",
+  "homepage": "https://devsheth05.github.io/anime-tracker",
   "dependencies": {
     "@coreui/coreui": "^5.2.0",
     "@coreui/react": "^5.4.1",
